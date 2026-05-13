@@ -5,6 +5,7 @@ from .db.database import engine
 from app.db.models.init import User, File
 from app.db.models.user import User
 from app.db.models.file import File
+from app.db.models.text import Text
 
 app = FastAPI(
     title="Enterprise RAG Application",
@@ -16,4 +17,4 @@ Base.metadata.create_all(bind=engine)
 
 @app.get("/")
 async def read_root():
-    return {"message": "Backend running"}
+    return {"message": "Backend running in cool way....."}
