@@ -7,6 +7,8 @@ from app.db.models.user import User
 from app.db.models.file import File
 from app.db.models.text import Text
 
+from app.api.routes.auth import router as auth_router
+
 app = FastAPI(
     title="Enterprise RAG Application",
     description="A Retrieval-Augmented Generation (RAG) application for enterprise use cases.",
@@ -15,6 +17,8 @@ app = FastAPI(
 
 Base.metadata.create_all(bind=engine)
 
+app.include_router(auth_router)
+
 @app.get("/")
 async def read_root():
-    return {"message": "Backend running in cool way....."}
+    return {"message": "Backend running in cool way..... wow😍"}
