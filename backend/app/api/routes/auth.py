@@ -53,13 +53,10 @@ def register_user(
             detail="Email already registered"
         )
         
-    print("PASSWORD:", user.password)
-    print("TYPE:", type(user.password))
-    print("LENGTH:", len(user.password))
+
 
     # Hash password
     hashed_password = hash_password(user.password)
-    print("HASHED PASSWORD:", hashed_password)
 
     # Create new user
     new_user = User(

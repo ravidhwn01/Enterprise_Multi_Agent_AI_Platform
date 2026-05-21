@@ -17,7 +17,6 @@ pwd_context = CryptContext(
 
 
 def hash_password(password: str) -> str:
-    print("error is here!")
 
     return pwd_context.hash(password)
 
