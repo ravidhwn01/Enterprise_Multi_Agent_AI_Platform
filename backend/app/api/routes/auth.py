@@ -21,6 +21,8 @@ from app.core.security import (
     create_access_token
 )
 
+from app.curd.user import get_user_by_email, create_user
+
 router = APIRouter(
     prefix="/auth",
     tags=["Authentication"]
@@ -41,10 +43,12 @@ def register_user(
     db: Session = Depends(get_db)
 ):
 
-    # Check if email already exists
-    existing_user = db.query(User).filter(
-        User.email == user.email
-    ).first()
+    # # Check if email already exists
+    # existing_user = db.query(User).filter(
+    #     User.email == user.email
+    # ).first()
+    
+    existing_user = get_user_by_email(db, user.email)
 
     if existing_user:
 
@@ -58,19 +62,31 @@ def register_user(
     # Hash password
     hashed_password = hash_password(user.password)
 
-    # Create new user
-    new_user = User(
-        username=user.username,
-        email=user.email,
-        hashed_password=hashed_password
-    )
+    # # Create new user
+    # new_user = User(
+    #     username=user.username,
+    #     email=user.email,
+    #     hashed_password=hashed_password
+    
+    # )
+    hashed_password = hash_password(
+    user.password
+)
+
+    # new_user = create_user(
+    #     db=db,
+    #     username=user.username,
+    #     email=user.email,
+    #     hashed_password=hashed_password
+    # )
+    new_user = create_user(db,user)
 
     # Save to database
-    db.add(new_user)
+    # db.add(new_user)
 
-    db.commit()
+    # db.commit()
 
-    db.refresh(new_user)
+    # db.refresh(new_user)
 
     return new_user
 
@@ -88,10 +104,12 @@ def login_user(
     db: Session = Depends(get_db)
 ):
 
-    # Find user by email
-    existing_user = db.query(User).filter(
-        User.email == user.email
-    ).first()
+    # # Find user by email
+    # existing_user = db.query(User).filter(
+    #     User.email == user.email
+    # ).first()
+    
+    existing_user = get_user_by_email(db, user.email)
 
     # User not found
     if not existing_user:

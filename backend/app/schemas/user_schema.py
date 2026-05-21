@@ -13,6 +13,13 @@ class UserLogin(BaseModel):
 
 
 
+class UserUpdate(BaseModel):
+    username: str | None = None
+    email: EmailStr | None = None
+    password: str | None = None
+    
+
+
 
 class UserResponse(BaseModel):
     id: int
