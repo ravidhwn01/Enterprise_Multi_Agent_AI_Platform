@@ -8,6 +8,7 @@ from app.db.models.file import File
 from app.db.models.text import Text
 
 from app.api.routes.auth import router as auth_router
+from app.api.routes.users import router as users_router
 
 app = FastAPI(
     title="Enterprise RAG Application",
@@ -18,6 +19,7 @@ app = FastAPI(
 Base.metadata.create_all(bind=engine)
 
 app.include_router(auth_router)
+app.include_router(users_router)
 
 @app.get("/")
 async def read_root():

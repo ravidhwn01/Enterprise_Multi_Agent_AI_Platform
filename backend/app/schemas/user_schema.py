@@ -19,6 +19,9 @@ class UserUpdate(BaseModel):
     password: str | None = None
     
 
+class UserDelete(BaseModel):
+    id: int | None = None
+    email: EmailStr | None = None
 
 
 class UserResponse(BaseModel):

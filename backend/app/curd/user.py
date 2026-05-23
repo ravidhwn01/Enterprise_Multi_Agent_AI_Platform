@@ -57,8 +57,19 @@ def update_user(db: Session, user_id: int, user_update: UserUpdate):
     return user
 
 
-def delete_user(db: Session, user_id: int):
-    user = db.query(User).filter(User.id == user_id).first()
+def delete_user(
+    db: Session,
+    user: User
+):
+
+    db.delete(user)
+
+    db.commit()
+
+
+# delete by email
+def delete_user_by_email(db: Session, email: str):
+    user = db.query(User).filter(User.email == email).first()
     if not user:
         return None
     db.delete(user)

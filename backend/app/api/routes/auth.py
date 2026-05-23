@@ -1,5 +1,5 @@
 
-
+from fastapi.security import OAuth2PasswordRequestForm
 
 from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.orm import Session
@@ -99,49 +99,96 @@ def register_user(
     "/login",
     response_model=Token
 )
+@router.post("/login")
 def login_user(
-    user: UserLogin,
+
+    form_data: OAuth2PasswordRequestForm = Depends(),
+
     db: Session = Depends(get_db)
+
 ):
 
-    # # Find user by email
-    # existing_user = db.query(User).filter(
-    #     User.email == user.email
-    # ).first()
-    
-    existing_user = get_user_by_email(db, user.email)
+    existing_user = get_user_by_email(
+        db,
+        form_data.username
+    )
 
-    # User not found
     if not existing_user:
 
         raise HTTPException(
-            status_code=status.HTTP_401_UNAUTHORIZED,
-            detail="Invalid credentials"
+            status_code=401,
+            detail="Invalid email"
         )
 
-    # Verify password
     is_valid = verify_password(
-        user.password,
+        form_data.password,
         existing_user.hashed_password
     )
 
-    # Password incorrect
     if not is_valid:
 
         raise HTTPException(
-            status_code=status.HTTP_401_UNAUTHORIZED,
-            detail="Invalid credentials"
+            status_code=401,
+            detail="Invalid password"
         )
 
-    # Create JWT token
     access_token = create_access_token(
         data={
             "sub": existing_user.email
         }
     )
 
-    # Return token
     return {
         "access_token": access_token,
         "token_type": "bearer"
     }
+    
+    
+    
+    
+# def login_user(
+#     user: UserLogin,
+#     db: Session = Depends(get_db)
+# ):
+
+#     # # Find user by email
+#     # existing_user = db.query(User).filter(
+#     #     User.email == user.email
+#     # ).first()
+    
+#     existing_user = get_user_by_email(db, user.email)
+
+#     # User not found
+#     if not existing_user:
+
+#         raise HTTPException(
+#             status_code=status.HTTP_401_UNAUTHORIZED,
+#             detail="Invalid credentials"
+#         )
+
+#     # Verify password
+#     is_valid = verify_password(
+#         user.password,
+#         existing_user.hashed_password
+#     )
+
+#     # Password incorrect
+#     if not is_valid:
+
+#         raise HTTPException(
+#             status_code=status.HTTP_401_UNAUTHORIZED,
+#             detail="Invalid credentials"
+#         )
+
+#     # Create JWT token
+#     access_token = create_access_token(
+#         data={
+#             "sub": existing_user.email
+#         }
+#     )
+
+#     # Return token
+#     return {
+#         "access_token": access_token,
+#         "token_type": "bearer"
+#     }
