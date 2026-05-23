@@ -63,3 +63,26 @@ def get_current_user(
         raise credentials_exception
 
     return user
+
+
+
+
+
+# Request
+#    ↓
+# Authorization Header
+#    ↓
+# OAuth2PasswordBearer
+#    ↓
+# Extract Token
+#    ↓
+# Decode JWT
+#    ↓
+# Extract Email
+#    ↓
+# Find User in DB
+#    ↓
+# Return User
+#    ↓
+# Protected Route Access
+
